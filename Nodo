@@ -1,0 +1,61 @@
+public class Nod {
+    private int valor, altura, fatorBalanceamento;
+    private Nodo esquerdo, direito, pai;
+
+    public Nodo(int valor) {
+        this.valor = valor;
+        this.altura = 1;
+        this.esquerdo = null;
+        this.direito = null;
+        this.pai = null;
+    }
+
+    // Getters e Setters
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public int getFatorBalanceamento() {
+        return fatorBalanceamento;
+    }
+
+    public void setFatorBalanceamento(int fatorBalanceamento) {
+        this.fatorBalanceamento = fatorBalanceamento;
+    }
+
+    public Nodo getEsquerdo() {
+        return esquerdo;
+    }
+
+    public void setEsquerdo(Nodo esquerdo) {
+        this.esquerdo = esquerdo;
+    }
+
+    public Nodo getDireito() {
+        return direito;
+    }
+
+    public void setDireito(Nodo direito) {
+        this.direito = direito;
+    }
+
+    public Nodo getPai() {
+        return pai;
+    }
+
+    public void setPai(Nodo pai) {
+        this.pai = pai;
+    }
+}
