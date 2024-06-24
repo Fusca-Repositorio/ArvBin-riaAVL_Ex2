@@ -1,231 +1,233 @@
+package atividade;
+
 class ArvoreAVL {
-    private NoAVL raiz;
+	private Nodo raiz;
 
-    // Método para obter a altura de um nó
-    private int obterAltura(NoAVL no) {
-        if (no == null)
-            return 0;
-        return no.altura;
-    }
+	// Método para obter a altura de um nó
+	private int obterAltura(Nodo no) {
+		if (no == null)
+			return 0;
+		return no.getAltura();
+	}
 
-    // Método para obter o fator de balanceamento de um nó
-    private int obterFatorBalanceamento(NoAVL no) {
-        if (no == null)
-            return 0;
-        return obterAltura(no.esquerdo) - obterAltura(no.direito);
-    }
+	// Método para obter o fator de balanceamento de um nó
+	private int obterFatorBalanceamento(Nodo no) {
+		if (no == null)
+			return 0;
+		return obterAltura(no.getEsquerdo()) - obterAltura(no.getDireito());
+	}
 
-    // Rotação para a direita
-    private NoAVL rotacaoDireita(NoAVL y) {
-        NoAVL x = y.esquerdo;
-        NoAVL T2 = x.direito;
+	// Rotação para a direita
+	private Nodo rotacaoDireita(Nodo y) {
+		Nodo x = y.getEsquerdo();
+		Nodo T2 = x.getDireito();
 
-        // Realiza rotação
-        x.direito = y;
-        y.esquerdo = T2;
+		// Realiza rotação
+		x.setDireito(y);
+		y.setEsquerdo(T2);
 
-        // Atualiza alturas
-        y.altura = Math.max(obterAltura(y.esquerdo), obterAltura(y.direito)) + 1;
-        x.altura = Math.max(obterAltura(x.esquerdo), obterAltura(x.direito)) + 1;
+		// Atualiza alturas
+		y.setAltura(Math.max(obterAltura(y.getEsquerdo()), obterAltura(y.getDireito())) + 1);
+		x.setAltura(Math.max(obterAltura(x.getEsquerdo()), obterAltura(x.getDireito())) + 1);
 
-        // Retorna nova raiz
-        return x;
-    }
+		// Retorna nova raiz
+		return x;
+	}
 
-    // Rotação para a esquerda
-    private NoAVL rotacaoEsquerda(NoAVL x) {
-        NoAVL y = x.direito;
-        NoAVL T2 = y.esquerdo;
+	// Rotação para a esquerda
+	private Nodo rotacaoEsquerda(Nodo x) {
+		Nodo y = x.getDireito();
+		Nodo T2 = y.getEsquerdo();
 
-        // Realiza rotação
-        y.esquerdo = x;
-        x.direito = T2;
+		// Realiza rotação
+		y.setEsquerdo(x);
+		x.setDireito(T2);
 
-        // Atualiza alturas
-        x.altura = Math.max(obterAltura(x.esquerdo), obterAltura(x.direito)) + 1;
-        y.altura = Math.max(obterAltura(y.esquerdo), obterAltura(y.direito)) + 1;
+		// Atualiza alturas
+		x.setAltura(Math.max(obterAltura(x.getEsquerdo()), obterAltura(x.getDireito())) + 1);
+		y.setAltura(Math.max(obterAltura(y.getEsquerdo()), obterAltura(y.getDireito())) + 1);
 
-        // Retorna nova raiz
-        return y;
-    }
+		// Retorna nova raiz
+		return y;
+	}
 
-    // Inserção de um valor na árvore AVL
-    public void inserir(int chave) {
-        raiz = inserirNo(raiz, chave);
-    }
+	// Inserção de um valor na árvore AVL
+	public void inserir(int chave) {
+		raiz = inserirNo(raiz, chave);
+	}
 
-    private NoAVL inserirNo(NoAVL no, int chave) {
-        // Passo 1: Inserção normal na árvore binária de busca
-        if (no == null)
-            return (new NoAVL(chave));
+	private Nodo inserirNo(Nodo no, int chave) {
+		// Passo 1: Inserção normal na árvore binária de busca
+		if (no == null)
+			return (new Nodo(chave));
 
-        if (chave < no.chave)
-            no.esquerdo = inserirNo(no.esquerdo, chave);
-        else if (chave > no.chave)
-            no.direito = inserirNo(no.direito, chave);
-        else
-            return no;
+		if (chave < no.chave)
+			no.setEsquerdo(inserirNo(no.getEsquerdo(), chave));
+		else if (chave > no.chave)
+			no.setDireito(inserirNo(no.getDireito(), chave));
+		else
+			return no;
 
-        // Passo 2: Atualiza a altura deste nó ancestral
-        no.altura = 1 + Math.max(obterAltura(no.esquerdo), obterAltura(no.direito));
+		// Passo 2: Atualiza a altura deste nó ancestral
+		no.setAltura(1 + Math.max(obterAltura(no.getEsquerdo()), obterAltura(no.getDireito())));
 
-        // Passo 3: Obtém o fator de balanceamento deste nó ancestral
-        int fatorBalanceamento = obterFatorBalanceamento(no);
+		// Passo 3: Obtém o fator de balanceamento deste nó ancestral
+		int fatorBalanceamento = obterFatorBalanceamento(no);
 
-        // Passo 4: Se o nó se tornar desbalanceado, há 4 casos
+		// Passo 4: Se o nó se tornar desbalanceado, há 4 casos
 
-        // Caso de rotação à direita
-        if (fatorBalanceamento > 1 && chave < no.esquerdo.chave) {
-            System.out.println("Realizando rotação simples à direita");
-            return rotacaoDireita(no);
-        }
+		// Caso de rotação à direita
+		if (fatorBalanceamento > 1 && chave < no.getEsquerdo().chave) {
+			System.out.println("Realizando rotação simples à direita");
+			return rotacaoDireita(no);
+		}
 
-        // Caso de rotação à esquerda
-        if (fatorBalanceamento < -1 && chave > no.direito.chave) {
-            System.out.println("Realizando rotação simples à esquerda");
-            return rotacaoEsquerda(no);
-        }
+		// Caso de rotação à esquerda
+		if (fatorBalanceamento < -1 && chave > no.getDireito().chave) {
+			System.out.println("Realizando rotação simples à esquerda");
+			return rotacaoEsquerda(no);
+		}
 
-        // Caso de rotação dupla à esquerda
-        if (fatorBalanceamento > 1 && chave > no.esquerdo.chave) {
-            System.out.println("Realizando rotação dupla à esquerda");
-            no.esquerdo = rotacaoEsquerda(no.esquerdo);
-            return rotacaoDireita(no);
-        }
+		// Caso de rotação dupla à esquerda
+		if (fatorBalanceamento > 1 && chave > no.getEsquerdo().chave) {
+			System.out.println("Realizando rotação dupla à esquerda");
+			no.setEsquerdo(rotacaoEsquerda(no.getEsquerdo()));
+			return rotacaoDireita(no);
+		}
 
-        // Caso de rotação dupla à direita
-        if (fatorBalanceamento < -1 && chave < no.direito.chave) {
-            System.out.println("Realizando rotação dupla à direita");
-            no.direito = rotacaoDireita(no.direito);
-            return rotacaoEsquerda(no);
-        }
+		// Caso de rotação dupla à direita
+		if (fatorBalanceamento < -1 && chave < no.getDireito().chave) {
+			System.out.println("Realizando rotação dupla à direita");
+			no.setDireito(rotacaoDireita(no.getDireito()));
+			return rotacaoEsquerda(no);
+		}
 
-        return no;
-    }
+		return no;
+	}
 
-    // Método para imprimir a árvore
-    public void imprimirArvore() {
-        imprimirArvore(raiz, "", true);
-    }
+	// Método para imprimir a árvore
+	public void imprimirArvore() {
+		imprimirArvore(raiz, "", true);
+	}
 
-    private void imprimirArvore(NoAVL no, String indentacao, boolean ultimo) {
-        if (no != null) {
-            System.out.print(indentacao);
-            if (ultimo) {
-                System.out.print("R----");
-                indentacao += "   ";
-            } else {
-                System.out.print("L----");
-                indentacao += "|  ";
-            }
-            System.out.println(no.chave + "(Altura:" + no.altura + " FB:" + obterFatorBalanceamento(no) + ")");
-            imprimirArvore(no.esquerdo, indentacao, false);
-            imprimirArvore(no.direito, indentacao, true);
-        }
-    }
+	private void imprimirArvore(Nodo no, String indentacao, boolean ultimo) {
+		if (no != null) {
+			System.out.print(indentacao);
+			if (ultimo) {
+				System.out.print("R----");
+				indentacao += "   ";
+			} else {
+				System.out.print("L----");
+				indentacao += "|  ";
+			}
+			System.out.println(no.chave + "(Altura:" + no.getAltura() + " FB:" + obterFatorBalanceamento(no) + ")");
+			imprimirArvore(no.getEsquerdo(), indentacao, false);
+			imprimirArvore(no.getDireito(), indentacao, true);
+		}
+	}
 
-    // Método para pesquisar um valor na árvore
-    public boolean pesquisar(int chave) {
-        return pesquisarNo(raiz, chave) != null;
-    }
+	// Método para pesquisar um valor na árvore
+	public boolean pesquisar(int chave) {
+		return pesquisarNo(raiz, chave) != null;
+	}
 
-    private NoAVL pesquisarNo(NoAVL no, int chave) {
-        if (no == null || no.chave == chave)
-            return no;
+	private Nodo pesquisarNo(Nodo no, int chave) {
+		if (no == null || no.chave == chave)
+			return no;
 
-        if (no.chave > chave)
-            return pesquisarNo(no.esquerdo, chave);
+		if (no.chave > chave)
+			return pesquisarNo(no.getEsquerdo(), chave);
 
-        return pesquisarNo(no.direito, chave);
-    }
+		return pesquisarNo(no.getDireito(), chave);
+	}
 
-    // Método para encontrar o maior valor
-    public int encontrarMaior() {
-        return encontrarMaiorNo(raiz).chave;
-    }
+	// Método para encontrar o maior valor
+	public int encontrarMaior() {
+		return encontrarMaiorNo(raiz).chave;
+	}
 
-    private NoAVL encontrarMaiorNo(NoAVL no) {
-        if (no.direito == null)
-            return no;
-        return encontrarMaiorNo(no.direito);
-    }
+	private Nodo encontrarMaiorNo(Nodo no) {
+		if (no.getDireito() == null)
+			return no;
+		return encontrarMaiorNo(no.getDireito());
+	}
 
-    // Método para encontrar o menor valor
-    public int encontrarMenor() {
-        return encontrarMenorNo(raiz).chave;
-    }
+	// Método para encontrar o menor valor
+	public int encontrarMenor() {
+		return encontrarMenorNo(raiz).chave;
+	}
 
-    private NoAVL encontrarMenorNo(NoAVL no) {
-        if (no.esquerdo == null)
-            return no;
-        return encontrarMenorNo(no.esquerdo);
-    }
+	private Nodo encontrarMenorNo(Nodo no) {
+		if (no.getEsquerdo() == null)
+			return no;
+		return encontrarMenorNo(no.getEsquerdo());
+	}
 
-    // Método para remover um valor da árvore AVL
-    public void remover(int chave) {
-        raiz = removerNo(raiz, chave);
-    }
+	// Método para remover um valor da árvore AVL
+	public void remover(int chave) {
+		raiz = removerNo(raiz, chave);
+	}
 
-    private NoAVL removerNo(NoAVL no, int chave) {
-        // Passo 1: Realiza a remoção normal na árvore binária de busca
-        if (no == null)
-            return no;
+	private Nodo removerNo(Nodo no, int chave) {
+		// Passo 1: Realiza a remoção normal na árvore binária de busca
+		if (no == null)
+			return no;
 
-        if (chave < no.chave)
-            no.esquerdo = removerNo(no.esquerdo, chave);
-        else if (chave > no.chave)
-            no.direito = removerNo(no.direito, chave);
-        else {
-            if ((no.esquerdo == null) || (no.direito == null)) {
-                NoAVL temp = null;
-                if (temp == no.esquerdo)
-                    temp = no.direito;
-                else
-                    temp = no.esquerdo;
+		if (chave < no.chave)
+			no.setEsquerdo(removerNo(no.getEsquerdo(), chave));
+		else if (chave > no.chave)
+			no.setDireito(removerNo(no.getDireito(), chave));
+		else {
+			if ((no.getEsquerdo() == null) || (no.getDireito() == null)) {
+				Nodo temp = null;
+				if (temp == no.getEsquerdo())
+					temp = no.getDireito();
+				else
+					temp = no.getEsquerdo();
 
-                if (temp == null) {
-                    temp = no;
-                    no = null;
-                } else
-                    no = temp;
-            } else {
-                NoAVL temp = encontrarMenorNo(no.direito);
-                no.chave = temp.chave;
-                no.direito = removerNo(no.direito, temp.chave);
-            }
-        }
+				if (temp == null) {
+					temp = no;
+					no = null;
+				} else
+					no = temp;
+			} else {
+				Nodo temp = encontrarMenorNo(no.getDireito());
+				no.chave = temp.chave;
+				no.setDireito(removerNo(no.getDireito(), temp.chave));
+			}
+		}
 
-        if (no == null)
-            return no;
+		if (no == null)
+			return no;
 
-        // Passo 2: Atualiza a altura do nó atual
-        no.altura = Math.max(obterAltura(no.esquerdo), obterAltura(no.direito)) + 1;
+		// Passo 2: Atualiza a altura do nó atual
+		no.setAltura(Math.max(obterAltura(no.getEsquerdo()), obterAltura(no.getDireito())) + 1);
 
-        // Passo 3: Obtém o fator de balanceamento do nó atual
-        int fatorBalanceamento = obterFatorBalanceamento(no);
+		// Passo 3: Obtém o fator de balanceamento do nó atual
+		int fatorBalanceamento = obterFatorBalanceamento(no);
 
-        // Passo 4: Se o nó estiver desbalanceado, há 4 casos
+		// Passo 4: Se o nó estiver desbalanceado, há 4 casos
 
-        // Caso de rotação à direita
-        if (fatorBalanceamento > 1 && obterFatorBalanceamento(no.esquerdo) >= 0)
-            return rotacaoDireita(no);
+		// Caso de rotação à direita
+		if (fatorBalanceamento > 1 && obterFatorBalanceamento(no.getEsquerdo()) >= 0)
+			return rotacaoDireita(no);
 
-        // Caso de rotação dupla à esquerda
-        if (fatorBalanceamento > 1 && obterFatorBalanceamento(no.esquerdo) < 0) {
-            no.esquerdo = rotacaoEsquerda(no.esquerdo);
-            return rotacaoDireita(no);
-        }
+		// Caso de rotação dupla à esquerda
+		if (fatorBalanceamento > 1 && obterFatorBalanceamento(no.getEsquerdo()) < 0) {
+			no.setEsquerdo(rotacaoEsquerda(no.getEsquerdo()));
+			return rotacaoDireita(no);
+		}
 
-        // Caso de rotação à esquerda
-        if (fatorBalanceamento < -1 && obterFatorBalanceamento(no.direito) <= 0)
-            return rotacaoEsquerda(no);
+		// Caso de rotação à esquerda
+		if (fatorBalanceamento < -1 && obterFatorBalanceamento(no.getDireito()) <= 0)
+			return rotacaoEsquerda(no);
 
-        // Caso de rotação dupla à direita
-        if (fatorBalanceamento < -1 && obterFatorBalanceamento(no.direito) > 0) {
-            no.direito = rotacaoDireita(no.direito);
-            return rotacaoEsquerda(no);
-        }
+		// Caso de rotação dupla à direita
+		if (fatorBalanceamento < -1 && obterFatorBalanceamento(no.getDireito()) > 0) {
+			no.setDireito(rotacaoDireita(no.getDireito()));
+			return rotacaoEsquerda(no);
+		}
 
-        return no;
-    }
+		return no;
+	}
 }
