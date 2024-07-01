@@ -1,3 +1,5 @@
+package atividade;
+
 public class Arvore_AVL {
 	public Nodo raiz;
 
@@ -14,37 +16,55 @@ public class Arvore_AVL {
 	}
 
 	// Função de rotação simples à direita
-	public Nodo rotacaoDireita(Nodo aux2) {
-		Nodo aux = aux2.getEsquerdo();
-		Nodo T2 = aux.getDireito();
+	public Nodo rotacaoDireita(Nodo aux) {
+		Nodo auxMaior = aux;
+		Nodo auxMedio = aux.getEsquerdo();
+		aux = aux.getPai();
 		// Realiza rotação
-		aux.setDireito(aux2);
-		aux2.setEsquerdo(T2); // Atualiza alturas
-		aux2.setAltura(Math.max(calculaAltura(aux2.getEsquerdo()), calculaAltura(aux2.getDireito())) + 1);
-		aux.setAltura(Math.max(calculaAltura(aux.getEsquerdo()), calculaAltura(aux.getDireito())) + 1);
-		// Retorna nova raiz
+		auxMaior.setEsquerdo(auxMedio.getDireito());
+		auxMedio.setDireito(auxMaior);
+		auxMaior.setPai(auxMedio);
+		auxMedio.setPai(aux);
+		if (auxMedio.getPai()==null) {
+			raiz = auxMedio;
+		}else {
+			aux.setDireito(auxMedio);
+		}
+		calculaAltura(auxMaior);
+		calculaAltura(auxMedio);
 		return aux;
 	}
 
 // Função de rotação simples à esquerda 
 	public Nodo rotacaoEsquerda(Nodo aux) {
-		Nodo aux2 = aux.getDireito();
-		Nodo T2 = aux2.getEsquerdo(); // Realiza rotação
-		aux2.setEsquerdo(aux);
-		aux.setDireito(T2); // Atualiza alturas
-		aux.setAltura(Math.max(calculaAltura(aux.getEsquerdo()), calculaAltura(aux.getDireito())) + 1);
-		aux2.setAltura(Math.max(calculaAltura(aux2.getEsquerdo()), calculaAltura(aux2.getDireito())) + 1);
-		return aux2;
-	}// Retorna nova raiz
+		Nodo auxMenor = aux;
+		Nodo auxMedio = aux.getDireito();
+		aux = aux.getPai();
+		// Realiza rotação
+		auxMenor.setDireito(auxMedio.getEsquerdo());
+		auxMedio.setEsquerdo(auxMenor);
+		auxMenor.setPai(auxMedio);
+		auxMedio.setPai(aux);
+		if (auxMedio.getPai()==null) {
+			raiz = auxMedio;
+		}else {
+			aux.setEsquerdo(auxMedio);
+		}
+		calculaAltura(auxMedio);
+		calculaAltura(auxMenor);
+		return aux;
+	}
 
 	// Função de rotação direita-esquerda
 	public Nodo rotacaoDireitaEsquerda(Nodo aux) {
-		aux.setDireito(rotacaoDireita(aux.getDireito()));
+		rotacaoDireita(aux);
+		rotacaoEsquerda(aux);
 		return rotacaoEsquerda(aux);
 	} // Função de rotação esquerda-direita
 
 	public Nodo rotacaoEsquerdaDireita(Nodo aux) {
-		aux.setEsquerdo(rotacaoEsquerda(aux.getEsquerdo()));
+		rotacaoEsquerda(aux);
+		rotacaoDireita(aux);
 		return rotacaoDireita(aux);
 	} // Função para verificar e balancear a árvore
 
@@ -77,14 +97,14 @@ public class Arvore_AVL {
 			}
 			novo.setPai(aux);
 			calculaAltura(aux);
-			System.out.println("*******Verifica balanceamento de  " + aux.getValor());
+			System.out.println("*****Verifica balanceamento de  " + aux.getValor()+"*****");
 			verificaBalanceamento(aux);
 		} else {
 			System.out.println("Inserindo " + valor + " na raiz");
 			setRaiz(new Nodo(valor));
 		}
 	}
-
+	
 // Função Principal de Remoção
 	public void remove(int valor) {
 		raiz = removeRecursivo(raiz, valor);
@@ -139,9 +159,21 @@ public class Arvore_AVL {
 	}
 	
 	private int calculaAltura(Nodo aux) {
-		if (aux == null)
+		if(aux == null)
 			return 0;
-		return aux.getAltura();
+		else {
+			int esq = calculaAltura(aux.getEsquerdo());
+			int dir = calculaAltura(aux.getDireito());
+			aux.setFatorBalanceamento(dir-esq);		
+			if(esq > dir) {
+				aux.setAltura(esq);
+				return esq+1;
+			}
+			else  {
+				aux.setAltura(dir);
+				return dir+1;
+			}
+		}
 	}
 
 	private void verificaBalanceamento(Nodo aux) {
@@ -161,14 +193,27 @@ public class Arvore_AVL {
 	}
 
 	// Função única de Impressão
+//	public void imprime(Nodo aux) {
+//		if (aux != null) {
+//			System.out.println(aux.getValor());
+//			imprime(aux.getEsquerdo());
+//			imprime(aux.getDireito());
+//		}
+//	}
+
 	public void imprime(Nodo aux) {
-		if (aux != null) {
+		if(aux != null) {
+			System.out.println("----- ");
 			System.out.println(aux.getValor());
+			if(aux.getPai() != null)
+				System.out.println("pai: "+aux.getPai().getValor());
+			System.out.println("altura: "+aux.getAltura());
+			System.out.println("balanceamento: "+aux.getFatorBalanceamento());
 			imprime(aux.getEsquerdo());
 			imprime(aux.getDireito());
 		}
 	}
-
+	
 	// Função Principal de Procura
 	public boolean procura(int valor) {
 		return procuraRecursivo(raiz, valor);
