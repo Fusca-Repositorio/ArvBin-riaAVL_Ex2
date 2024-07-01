@@ -1,4 +1,3 @@
-package atividade;
 
 public class Nodo {
     private int valor, altura, fatorBalanceamento;
