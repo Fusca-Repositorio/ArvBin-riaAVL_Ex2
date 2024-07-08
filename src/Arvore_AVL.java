@@ -35,7 +35,7 @@ public class Arvore_AVL {
 		return aux;
 	}
 
-// Função de rotação simples à esquerda 
+	// Função de rotação simples à esquerda 
 	public Nodo rotacaoEsquerda(Nodo aux) {
 		Nodo auxMenor = aux;
 		Nodo auxMedio = aux.getDireito();
@@ -55,18 +55,18 @@ public class Arvore_AVL {
 		return aux;
 	}
 
-	// Função de rotação direita-esquerda
-	public Nodo rotacaoDireitaEsquerda(Nodo aux) {
-		rotacaoDireita(aux);
+	
+	// Função de rotação dupla direita e esquerda 
+	private void rotacaoDireitaEsquerda(Nodo aux) {
+		rotacaoDireita(aux.getDireito());
 		rotacaoEsquerda(aux);
-		return rotacaoEsquerda(aux);
-	} // Função de rotação esquerda-direita
-
-	public Nodo rotacaoEsquerdaDireita(Nodo aux) {
-		rotacaoEsquerda(aux);
+	}
+	
+	// Função de rotação dupla esquerda e direita 
+	private void rotacaoEsquerdaDireita(Nodo aux) {
+		rotacaoEsquerda(aux.getEsquerdo());
 		rotacaoDireita(aux);
-		return rotacaoDireita(aux);
-	} // Função para verificar e balancear a árvore
+	}
 
 	public void insere(Nodo aux, int valor) {
 		// verifica se a raiz da árvore não é nula
@@ -105,7 +105,7 @@ public class Arvore_AVL {
 		}
 	}
 	
-// Função Principal de Remoção
+	// Função Principal de Remoção
 	public void remove(int valor) {
 		raiz = removeRecursivo(raiz, valor);
 	}
@@ -135,10 +135,10 @@ public class Arvore_AVL {
 			return aux.getDireito(); // Nó com subárvore direita
 		} else if (aux.getDireito() == null) {
 			return aux.getEsquerdo(); // Nó com subárvore esquerda
-		} else {
-			Nodo substituto = encontraMinimo(aux.getDireito());
+		} else { //Nó com duas subárvores
+			Nodo substituto = encontraMaximo(aux.getEsquerdo());
 			aux.setValor(substituto.getValor());
-			aux.setDireito(removeRecursivo(aux.getDireito(), substituto.getValor()));
+			aux.setEsquerdo(removeRecursivo(aux.getEsquerdo(), substituto.getValor()));
 			return aux;
 		}
 	}
@@ -191,15 +191,6 @@ public class Arvore_AVL {
 			}
 		}
 	}
-
-	// Função única de Impressão
-//	public void imprime(Nodo aux) {
-//		if (aux != null) {
-//			System.out.println(aux.getValor());
-//			imprime(aux.getEsquerdo());
-//			imprime(aux.getDireito());
-//		}
-//	}
 
 	public void imprime(Nodo aux) {
 		if(aux != null) {
