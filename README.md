@@ -5,6 +5,9 @@
 
 Esse projeto visa implementar o que se espera de comportamento em uma Árvore de Binária de dados no formato AVL, partindo da remoção, consulta e impressão ordenada de seus nodos.
 
+<img src="https://i.pinimg.com/564x/c6/41/d4/c641d4c2d11c35a2959a4ff68f1348cd.jpg" alt="Descrição da Imagem" width="300">
+**Nossos mais sinceros agradecimentos a Prof Isabel Siqueira**
+
 ## 📋 Índice
 
 - [🌳 Árvore Binária AVL - Exercício de Fixação 2](#-árvore-binária-avl---exercício-de-fixação-2)
